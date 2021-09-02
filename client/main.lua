@@ -91,8 +91,8 @@ Citizen.CreateThread(function()
 					
 							local luck = math.random(1, 5)
 							if luck == 3 then
-								TriggerServerEvent('esx_outlawalert:HoldUpInProgress', playerpos, streetName, playerGender)
-								--sendNotification('You were seen on CCTV!', 'error', 2000)
+								local ped = PlayerId(-1)
+								TriggerServerEvent('esx_robcr:fail', ped)
 								ESX.ShowNotification("~r~You were seen on CCTV!")
 								local cam = CreateCam("DEFAULT_SCRIPTED_CAMERA", 1)
 							SetCamCoord(cam, cr.x, cr.y, cr.z + 3.0, 0)
@@ -108,6 +108,7 @@ Citizen.CreateThread(function()
 							SetFocusEntity(GetPlayerPed(PlayerId()))
 							else
 								searching = true
+								SetEntityHeading(oPlayer,GetHeadingFromVector_2d(cr.x-playerpos.x,cr.y-playerpos.y))
 								exports.rprogress:Custom({
 								Async = true,
 								x = 0.5,
@@ -161,35 +162,6 @@ Citizen.CreateThread(function()
 end)
 
 Citizen.CreateThread(function()
-    Citizen.Wait(100)
-    while true do
-
-        local sleep = 1000
-
-        if percent then
-
-            local playerPed = PlayerPedId()
-            local playerCoords = GetEntityCoords(playerPed)
-
-            for i = 1, #closestCR do
-
-                local x = GetClosestObjectOfType(playerCoords, 1.0, GetHashKey(closestCR[i]), false, false, false)
-                local entity = nil
-                
-                if DoesEntityExist(x) then
-                    sleep  = 5
-                    entity = x
-                    cr    = GetEntityCoords(entity)
-                    drawText3D(cr.x, cr.y, cr.z + 0.2, TimeLeft .. '~g~%~s~')
-                    break
-                end
-            end
-        end
-        Citizen.Wait(sleep)
-	end
-end)
-
-Citizen.CreateThread(function()
     while true do
         Citizen.Wait(0)
 
@@ -200,14 +172,16 @@ Citizen.CreateThread(function()
     end
 end)
 
-Citizen.CreateThread(function()
-	while true do
-		Citizen.Wait(3000)
-		streetName,_ = GetStreetNameAtCoord(playerpos.x, playerpos.y, playerpos.z)
-		streetName = GetStreetNameFromHashKey(streetName)
-	end
-end)
-
-AddEventHandler('skinchanger:loadSkin', function(character)
-	playerGender = character.sex
+RegisterNetEvent('esx_robcr:callCops')
+AddEventHandler('esx_robcr:callCops', function(ped)
+    local mugshot, mugshotStr = ESX.Game.GetPedMugshot(GetPlayerPed(ped))
+	ESX.ShowAdvancedNotification('CCTV', 'Store Holdup!', 'We have sent a photo of the robber taken by the CCTV!', mugshotStr, 4)
+    UnregisterPedheadshot(mugshot)
+    local Atm = AddBlipForCoord(playerpos.x, playerpos.y, playerpos.z)
+    SetBlipSprite(Atm , 161)
+    SetBlipScale(Atm , 2.0)
+    SetBlipColour(Atm, 1)
+    PulseBlip(Atm)
+	Wait(30*1000)
+    RemoveBlip(Atm)
 end)

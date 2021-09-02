@@ -42,3 +42,14 @@ local player = ESX.GetPlayerFromId(source)
     end
 end)
 
+RegisterServerEvent('esx_robcr:fail')
+AddEventHandler('esx_robcr:fail', function(ped)
+	local xPlayers = ESX.GetPlayers()
+	for i=1, #xPlayers, 1 do
+		local xPlayer = ESX.GetPlayerFromId(xPlayers[i])
+		if xPlayer.job.name == 'police' then
+			TriggerClientEvent('esx_robcr:callCops', xPlayers[i], ped)
+		end
+	end
+end)
+
