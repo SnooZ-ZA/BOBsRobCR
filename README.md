@@ -31,7 +31,7 @@ Press H to Rob Cash Registers
 
 Random success.
 
-Random Fail, a Hold up in Progress alert with location is sent to police using esx_outlawalert
+Random Fail, a Hold up in Progress alert with location blip is sent to police
 
 Credit:
 rprogress
