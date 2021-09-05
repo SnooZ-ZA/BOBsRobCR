@@ -6,13 +6,6 @@ cachedCR = {}
 Config = {}
 Config.CopsRequired = 0
 
-local streetName
-local _
-local playerGender
-
-local _source    = source
-
-
 local oPlayer = false
 local InVehicle = false
 local playerpos = false
