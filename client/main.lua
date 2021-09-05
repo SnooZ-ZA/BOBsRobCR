@@ -144,7 +144,6 @@ Citizen.CreateThread(function()
 							end
                     
 					else
-                        --sendNotification('You have already robbed here!', 'error', 2000)
 						ESX.ShowNotification("You have already robbed here!")
                     end
 				else
