@@ -12,7 +12,7 @@ local playerpos = false
 
 Citizen.CreateThread(function()
     while(true) do
-		oPlayer = GetPlayerPed(-1)
+		oPlayer = PlayerPedId()
         InVehicle = IsPedInAnyVehicle(oPlayer, true)
 		playerpos = GetEntityCoords(oPlayer)
         Citizen.Wait(500)
